@@ -25,4 +25,4 @@ android:
 before_install:
  - chmod +x gradlew
 
- sccript: ./gradlew build
+sccript: ./gradlew build
