@@ -1,0 +1,17 @@
+{
+  "package": {
+    "name": "ElixsrAndroidCore",
+    "repo": "elixsr-android-core",
+    "subject": "elixsr",
+    "desc": "I was pushed completely automatically",
+    "website_url": "http://elix.sr",
+    "issue_tracker_url": "https://github.com/elixsr/ElixsrAndroidCore/issues",
+    "vcs_url": "https://github.com/elixsr/ElixsrAndroidCore.git",
+    "licenses": ["GPL-3.0"]
+  },
+
+  "version": {
+    "name": "0.1"
+  },
+  "publish": true
+}
