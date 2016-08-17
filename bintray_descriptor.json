@@ -6,13 +6,12 @@
   },
 
   "version": {
-    "name": "1.0",
-    "gpgSign": false
+    "name": "1.0"
   },
   "files":
   [
-    {"includePattern": "elixsrcore/build/outputs(.*)*/(.*\\.aar)", "excludePattern": ".*/do-not-deploy/.*", "uploadPattern": "$2"},
-    {"includePattern": "elixsrcore/build/docs/(.*)", "uploadPattern": "docs/$1"}
+    {"includePattern": ".*/build/outputs(.*)*/(.*\\.aar)", "excludePattern": ".*/do-not-deploy/.*", "uploadPattern": "$1"},
+    {"includePattern": ".*/build/docs/(.*)", "uploadPattern": "docs/$2"}
   ],
   "publish": true
 }
