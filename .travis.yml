@@ -1,9 +1,6 @@
 language: android
 jdk:
-  - oraclejdk8.
-
-script:
- - "./gradlew build"
+  - oraclejdk8
 
 android:
   components:
@@ -27,3 +24,5 @@ android:
 
 before_install:
  - chmod +x gradlew
+
+ sccript: ./gradlew build
