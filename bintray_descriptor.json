@@ -11,7 +11,12 @@
   },
 
   "version": {
-    "name": "0.1"
+    "name": "1.0"
   },
+  "files":
+  [
+    {"includePattern": "elixsrcore/build/outputs(.*)*/(.*\\.aar)", "excludePattern": ".*/do-not-deploy/.*", "uploadPattern": "$2"},
+    {"includePattern": "elixsrcore/build/docs/(.*)", "uploadPattern": "docs/$1"}
+  ],
   "publish": true
 }

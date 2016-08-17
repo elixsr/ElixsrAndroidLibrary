@@ -1,29 +1,25 @@
 language: android
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 android:
   components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
-    - platform-tools
-    - tools
-
-    # The BuildTools version used by your project
-    - build-tools-24.0.0
-
-    # The SDK version used to compile your project
-    - android-24
-
-    # Additional components
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - addon-google_apis-google-19
-
-
+  - platform-tools
+  - tools
+  - build-tools-24.0.0
+  - android-24
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - addon-google_apis-google-19
 before_install:
- - chmod +x gradlew
-
+- chmod +x gradlew
 script:
-  - ./gradlew clean elixsrcore:build
+- "./gradlew clean elixsrcore:build"
+
+deploy:
+  key:
+    secure: wUbGABC+TrLBa49NXZRtYQqYriNbmpxAJF7fMPWRULUR/RqgmjtXKjT1N8PruRKZ8UdoK+sHI4vDhWukdMeuLSLll1aJK7yAc/4DnJlGLuXnX+Vg1pMhAMuryKtubSjcyQhgeV6LTc2w1ki9ydsTxIv2fXIOXCTG7xICXH8hssL0qkdxPuZz+ezBhjk6McJifis/NyTnEWBDGhnd1YVzBsGLs+80aurwM/7PMFmzksRYmAiqA2sZgp/TAf1BFTs7rltt+QU0QdqSUerf5cfiq1KcD6sfCjHNoH52Tjne4FIAWyRCF6vinENvG2Z9ytrdKCNvVPoSf8dHdlK0i7oy434OSe4nWpwzU3SFWeDSSqsrjUdjP5A81fP675rsY0P0TSsGyhDItLlvTCefUhEMB2We+cBiC4LmCV0t6ZU3ysTg694/nwlqyVDdyJmFYBhAcFGZUX9U11b7/A3BVxxV1sL9anmsWuFoHWWjwvChDDIobfuwlqT0R5ZQwt82ljGLv+K4ZskIgcm9IhvnAW79+wIzAVKNs4VIIo05ZNQAGTA1bmaqrCTS/S14dSX6DMBdVT6xNXXgQc+j7jWlQLnM01RsmWb+Bq6kXQe11zpTdeckilsebX1pp3M7jxANafZFm+DutiocoIYIgOl0f4kPE9XfweXiyc7lZ/GB1men5fs=
+  provider: bintray
+  file: "bintray_descriptor"
+  user: "niallmcs"
+  dry-run: "false"
