@@ -25,4 +25,5 @@ android:
 before_install:
  - chmod +x gradlew
 
-sccript: ./gradlew build
+script:
+  - ./gradlew clean elixsrcore:build
