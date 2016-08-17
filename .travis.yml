@@ -1,6 +1,8 @@
 language: android
 jdk:
-  - oraclejdk8
+  - oraclejdk8.
+
+script: "./gradlew build"
 
 android:
   components:
