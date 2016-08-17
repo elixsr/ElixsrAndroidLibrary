@@ -10,8 +10,7 @@
   },
   "files":
   [
-    {"includePattern": ".*/build/outputs(.*)*/(.*\\.aar)", "excludePattern": ".*/do-not-deploy/.*", "uploadPattern": "$1"},
-    {"includePattern": ".*/build/docs/(.*)", "uploadPattern": "docs/$2"}
+    {"includePattern": ".*build\/outputs\/(.*.aar)", "uploadPattern": "$1"}
   ],
   "publish": true
 }
