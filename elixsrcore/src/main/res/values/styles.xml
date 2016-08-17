@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme"></style>
+
+    <!-- SwitchBar -->
+    <!-- Used to color the switch bar controls -->
+    <style name="ThemeOverlay.SwitchBar" parent="ThemeOverlay.AppCompat">
+        <!-- Used by controls, e.g. CheckBox, ProgressBar, etc. -->
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="ThemeOverlay.SwitchBar.Settings" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="switchBarMarginStart">@dimen/switchbar_margin_start</item>
+        <item name="switchBarMarginEnd">@dimen/switchbar_margin_end</item>
+    </style>
+
+    <style name="ThemeOverlay.SwitchBar.SubSettings" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="switchBarMarginStart">@dimen/switchbar_subsettings_margin_start</item>
+        <item name="switchBarMarginEnd">@dimen/switchbar_subsettings_margin_end</item>
+    </style>
+
+    <style name="TextAppearance.Switch" parent="TextAppearance.AppCompat.Title" />
+
+    <style name="AppTheme.EmptyState.Title">
+        <item name="android:textColor">@color/emptyStateTitleColor</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AppTheme.EmptyState.Message">
+        <item name="android:textColor">@color/emptyStateMessageColor</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AppTheme.EmptyState">
+
+    </style>
+
+
+</resources>

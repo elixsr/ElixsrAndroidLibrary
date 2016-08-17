@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TimelineCalendarView">
+        <attr name="timelineCalendarTextSize" format="dimension"/>
+        <attr name="timelineCalendarBackgroundColor" format="color"/>
+        <attr name="timelineCalendarCurrentDayBackgroundColor" format="color"/>
+        <attr name="timelineCalendarCurrentSelectedDayBackgroundColor" format="color"/>
+        <attr name="timelineCalendarTextColor" format="color"/>
+        <attr name="timelineCalendarMultiEventIndicatorColor" format="color"/>
+        <attr name="timelineCalendarTargetHeight" format="dimension"/>
+        <attr name="timelineCalendarSelectFirstDayOfMonthOnScroll" format="boolean"/>
+        <attr name="timelineCalendarNoEventDayColor" format="color"/>
+        <attr name="timelineCalendarCurrentSelectedDayColor" format="color"/>
+        <attr name="timelineCalendarDayHeadingColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="RepeatingImageLayout">
+        <attr name="repeatingImageLayoutImage" format="integer" />
+        <attr name="repeatingImageLayoutDuration" format="integer" />
+        <attr name="repeatingImageLayoutImageColor" format="color" />
+        <attr name="repeatingImageLayoutPaddingMarginFromTop" format="boolean" />
+        <attr name="repeatingImageLayoutTile" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="EmptyStateView">
+        <attr name="emptyStateViewImage" format="integer" />
+        <attr name="emptyStateViewTitle" format="string" />
+        <attr name="emptyStateViewMessage" format="string" />
+    </declare-styleable>
+
+
+    <attr name="switchBarTheme" format="reference" />
+    <attr name="switchBarMarginStart" format="dimension" />
+    <attr name="switchBarMarginEnd" format="dimension" />
+</resources>
