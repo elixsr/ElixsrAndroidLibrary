@@ -10,7 +10,10 @@
   },
   "files":
   [
-    {"includePattern": "elixsrcore\/build\/outputs\/(.*.aar)", "uploadPattern": "$1"}
+    {
+      "includePattern": "elixsrcore\/build\/outputs\/(.*)\/(.*.aar)",
+      "uploadPattern": "$2"
+    }
   ],
   "publish": true
 }
