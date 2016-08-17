@@ -10,7 +10,7 @@
   },
   "files":
   [
-    {"includePattern": ".*build\/outputs\/(.*.aar)", "uploadPattern": "$1"}
+    {"includePattern": "build\/outputs\/(.*.aar)", "uploadPattern": "$1"}
   ],
   "publish": true
 }
