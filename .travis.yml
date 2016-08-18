@@ -14,12 +14,4 @@ android:
 before_install:
 - chmod +x gradlew
 script:
-- "./gradlew clean elixsrcore:build"
-
-deploy:
-  key:
-    secure: wUbGABC+TrLBa49NXZRtYQqYriNbmpxAJF7fMPWRULUR/RqgmjtXKjT1N8PruRKZ8UdoK+sHI4vDhWukdMeuLSLll1aJK7yAc/4DnJlGLuXnX+Vg1pMhAMuryKtubSjcyQhgeV6LTc2w1ki9ydsTxIv2fXIOXCTG7xICXH8hssL0qkdxPuZz+ezBhjk6McJifis/NyTnEWBDGhnd1YVzBsGLs+80aurwM/7PMFmzksRYmAiqA2sZgp/TAf1BFTs7rltt+QU0QdqSUerf5cfiq1KcD6sfCjHNoH52Tjne4FIAWyRCF6vinENvG2Z9ytrdKCNvVPoSf8dHdlK0i7oy434OSe4nWpwzU3SFWeDSSqsrjUdjP5A81fP675rsY0P0TSsGyhDItLlvTCefUhEMB2We+cBiC4LmCV0t6ZU3ysTg694/nwlqyVDdyJmFYBhAcFGZUX9U11b7/A3BVxxV1sL9anmsWuFoHWWjwvChDDIobfuwlqT0R5ZQwt82ljGLv+K4ZskIgcm9IhvnAW79+wIzAVKNs4VIIo05ZNQAGTA1bmaqrCTS/S14dSX6DMBdVT6xNXXgQc+j7jWlQLnM01RsmWb+Bq6kXQe11zpTdeckilsebX1pp3M7jxANafZFm+DutiocoIYIgOl0f4kPE9XfweXiyc7lZ/GB1men5fs=
-  provider: bintray
-  file: "./bintray_descriptor.json"
-  user: "elixsr"
-  dry-run: "false"
+- "./gradlew clean elixsrcore:build bintrayUpload"

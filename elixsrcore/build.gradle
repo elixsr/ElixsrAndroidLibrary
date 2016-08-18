@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
 
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
@@ -34,4 +38,37 @@ dependencies {
     compile 'com.google.firebase:firebase-ads:9.2.1'
     compile 'com.firebaseui:firebase-ui:0.4.2'
     compile 'com.firebaseui:firebase-ui-database:0.4.2'
+}
+
+//see https://github.com/bintray/gradle-bintray-plugin#readme
+
+def VERSION_NUM = "1." + (System.getenv("TRAVIS_BUILD_NUMBER") as Integer ?: 0)
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
+            groupId 'com.elixsr.elixsrcore'
+            artifactId 'elixsr-core'
+            version VERSION_NUM
+        }
+    }
+}
+
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+
+    publications = ['MyPublication']
+
+    pkg {
+        repo = 'elixsr-android-core'
+        name = 'ElixsrAndroidCore'
+        userOrg = 'elixsr'
+
+        version {
+            name = VERSION_NUM
+        }
+    }
 }

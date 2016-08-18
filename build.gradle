@@ -12,10 +12,19 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
+
 allprojects {
     repositories {
         jcenter()
     }
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+
+
+
 }
 
 task clean(type: Delete) {
