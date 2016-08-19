@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#102F52</color>
+    <color name="colorPrimaryDark">#0C233E</color>
+    <color name="colorAccent">#D2C962</color>
+    <color name="colorContentBackground">#0E182D</color>
+    <color name="timelineMonthHeading">#ffffff</color>
+
+    <color name="emptyStateTitleColor">#C9C9C9</color>
+    <color name="emptyStateMessageColor">#818181</color>
+</resources>

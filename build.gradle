@@ -23,10 +23,259 @@ allprojects {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
 
-
-
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+
+//Skip Javadoc generation for Java 1.8 as it breaks build
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+/**
+ * Configure common tasks on all the submodules
+ */
+allprojects { project ->
+
+    // Get constants, this is where we store things
+    // like the list of submodules or the version
+    project.apply from: "$rootDir/common/constants.gradle"
+
+    def isLibrary = 'library'.equals(project.name)
+    def isSubmodule = project.ext.submodules.contains(project.name)
+
+    // Only applies to submodules, not the library module
+    def pomTask = "generatePomFileFor${project.name.capitalize()}LibraryPublication";
+
+    if (isSubmodule || isLibrary) {
+
+        // So that we can resolve 'android' variable
+        project.apply plugin: 'com.android.library'
+        android {
+            compileSdkVersion 24
+            buildToolsVersion "${project.ext.buildtools}"
+        }
+
+        // Task to generate sources JAR
+        task sourcesJar(type: Jar) {
+            classifier = 'sources'
+            from android.sourceSets.main.java.srcDirs
+        }
+
+        // Task to generate javadoc
+        task javadoc(type: Javadoc) {
+            source = android.sourceSets.main.java.srcDirs
+            classpath += configurations.compile
+            classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        }
+
+        // Task to generate javadoc JAR
+        task javadocJar(type: Jar, dependsOn: javadoc) {
+            classifier = 'javadoc'
+            from javadoc.destinationDir
+        }
+
+        // Define base name for archives
+        // Ex: elixsr-core
+        archivesBaseName = isSubmodule ? "elixsr-${project.name}" : "elixsr"
+
+        // Use tasks above to define artifacts
+        artifacts {
+            archives javadocJar
+            archives sourcesJar
+        }
+
+        // So that we can define publication
+        project.apply plugin: 'maven-publish'
+
+        publishing {
+            // By passing -Pcustom_local=/some/path and running the
+            // publishLibraryPublicationToCustomLocalRepository task you can publish this library to a
+            // custom maven repository location on your machine.
+            repositories {
+                maven {
+                    name 'CustomLocal'
+                    url uri(project.hasProperty('custom_local') ? project.getProperty('custom_local') : '/tmp/')
+                }
+            }
+
+            repositories {
+                maven {
+                    name 'BuildLocal'
+                    url "$buildDir/repo"
+                }
+            }
+        }
+    }
+
+    // POM to meet maven specs
+    if (isLibrary || isSubmodule) {
+        def targetName = isLibrary ? 'monolithLibrary' : "${project.name}Library"
+
+        publishing {
+            publications {
+                "${targetName}"(MavenPublication) {
+                    pom.withXml {
+                        // Common values
+                        def repoUrl = 'https://github.com/elixsr/ElixsrAndroidLibrary'
+                        def scmUrl = 'scm:git:git@github.com/elixsr/ElixsrAndroidLibrary.git'
+
+                        // Name
+                        asNode().appendNode('name', artifactId)
+
+                        // Description
+                        asNode().appendNode('description', 'Elixsr Library for Android')
+
+                        // Organization
+                        def organization = asNode().appendNode('organization')
+                        organization.appendNode('name', 'Elixsr')
+                        organization.appendNode('url', repoUrl)
+
+                        // URL
+                        asNode().appendNode('url', repoUrl)
+
+                        // SCM
+                        def scm = asNode().appendNode('scm')
+                        scm.appendNode('connection', scmUrl)
+                        scm.appendNode('developerConnection', scmUrl)
+                        scm.appendNode('url', repoUrl)
+                        scm.appendNode('tag', 'HEAD')
+
+                        // Developers
+                        def developer = asNode().appendNode('developers').appendNode('developer')
+                        developer.appendNode('id', 'niallmcs')
+                        developer.appendNode('email', 'contact@elix.sr')
+                        developer.appendNode('organization', 'Elixsr')
+                        developer.appendNode('organizationUrl', 'https://elix.sr')
+                        def roles = developer.appendNode('roles')
+                        roles.appendNode('role', 'Project-Administrator')
+                        roles.appendNode('role', 'Developer')
+                        developer.appendNode('timezone', '-8')
+
+                    }
+                }
+            }
+        }
+    }
+
+    if (isSubmodule) {
+        // Convenience task to prepare everything we need for releases
+        task prepareArtifacts(dependsOn: [javadocJar, sourcesJar, assembleRelease, pomTask]) {}
+
+        publishing {
+
+            // Define a publication for each submodule
+            publications {
+
+                // Ex: authLibrary(MavenPublication)
+                "${project.name}Library"(MavenPublication) {
+                    groupId project.ext.group
+                    artifactId archivesBaseName
+                    version project.ext.version
+
+                    // Release AAR, Sources, and JavaDoc
+                    artifact "$buildDir/outputs/aar/$archivesBaseName-release.aar"
+                    artifact javadocJar
+                    artifact sourcesJar
+
+                    pom.withXml {
+                        def dependenciesNode = asNode().getAt("dependencies")[0]
+                        if (dependenciesNode == null) {
+                            dependenciesNode = asNode().appendNode("dependencies");
+                        }
+
+                        // Add all that are 'compile'
+                        configurations.compile.allDependencies.each {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (isLibrary) {
+
+        // Define the monolith publication
+        publishing {
+
+            publications {
+                monolithLibrary(MavenPublication) {
+                    groupId project.ext.group
+                    artifactId archivesBaseName
+                    version project.ext.version
+
+                    artifact "$buildDir/outputs/aar/$archivesBaseName-release.aar"
+                    artifact javadocJar
+                    artifact sourcesJar
+
+                    // Monolith is just a POM that depends on the others
+                    pom.withXml {
+                        def dependenciesNode = asNode().getAt("dependencies")[0]
+                        if (dependenciesNode == null) {
+                            dependenciesNode = asNode().appendNode("dependencies");
+                        }
+
+                        // Add a maven dependency on each submodule
+                        project.ext.submodules.each { module ->
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', project.ext.group)
+                            dependencyNode.appendNode('artifactId', "elixsr-${module}")
+                            dependencyNode.appendNode('version', project.ext.version)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Bintray Configuration (applies to submodule and the monolith)
+    if (isSubmodule || isLibrary) {
+        project.apply plugin: 'com.jfrog.bintray'
+
+        def archivesBaseName = isLibrary ? 'elixsr' : "elixsr-${project.name}"
+        def pomLoc = isLibrary ? "$buildDir/publications/monolithLibrary/pom-default.xml" : "$buildDir/publications/${project.name}Library/pom-default.xml"
+
+        group = project.ext.group
+        version = project.ext.version
+
+        def versionName = project.ext.version
+
+        bintray {
+            user = hasProperty('BINTRAY_USER') ? getProperty('BINTRAY_USER') : System.getenv('BINTRAY_USER')
+            key = hasProperty('BINTRAY_KEY') ? getProperty('BINTRAY_KEY') : System.getenv('BINTRAY_KEY')
+
+            filesSpec {
+                from pomLoc
+                into "com/elixsr/$archivesBaseName/$versionName/"
+                rename { String fileName ->
+                    "${archivesBaseName}-${project.ext.version}.pom"
+                }
+            }
+
+            configurations = [ 'archives' ]
+
+            pkg {
+                repo = 'maven'
+                name = archivesBaseName
+                userOrg = 'elixsr'
+                licenses = [ 'GPL-3.0' ]
+                vcsUrl = 'https://github.com/elixsr/ElixsrAndroidCore.git'
+
+                version {
+                    name = versionName
+                }
+            }
+        }
+    }
 }

@@ -44,31 +44,61 @@ dependencies {
 
 def VERSION_NUM = "1." + (System.getenv("TRAVIS_BUILD_NUMBER") as Integer ?: 0)
 
-publishing {
-    publications {
-        MyPublication(MavenPublication) {
-            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
-            groupId 'com.elixsr.elixsrcore'
-            artifactId 'elixsr-core'
-            version VERSION_NUM
-        }
+//publishing {
+//    publications {
+//        MyPublication(MavenPublication) {
+//            artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
+//            groupId 'com.elixsr.elixsrcore'
+//            artifactId 'elixsr-core'
+//            version VERSION_NUM
+//        }
+//    }
+//}
+//
+//
+//bintray {
+//    user = System.getenv('BINTRAY_USER')
+//    key = System.getenv('BINTRAY_KEY')
+//
+//    publications = ['MyPublication']
+//
+//    pkg {
+//        repo = 'elixsr-android-core'
+//        name = 'ElixsrAndroidCore'
+//        userOrg = 'elixsr'
+//
+//        version {
+//            name = VERSION_NUM
+//        }
+//    }
+//}
+
+
+android.libraryVariants.all { variant ->
+    task("${variant.name}Javadoc", type: Javadoc, dependsOn: "assemble" + "${variant.name}".capitalize()) {
+        source = variant.javaCompile.source
+
+        title = "Elixsr Core API"
+
+        options.links("http://docs.oracle.com/javase/7/docs/api/");
+        options.linksOffline("http://d.android.com/reference","${android.sdkDirectory}/docs/reference");
+
+        // First add all of your dependencies to the classpath, then add the android jars
+        classpath += files(variant.javaCompile.classpath.files)
+        classpath += files(android.getBootClasspath())
+
+        // We're excluding these generated files
+        exclude '**/BuildConfig.java'
+        exclude '**/R.java'
     }
 }
 
-
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-
-    publications = ['MyPublication']
-
-    pkg {
-        repo = 'elixsr-android-core'
-        name = 'ElixsrAndroidCore'
-        userOrg = 'elixsr'
-
-        version {
-            name = VERSION_NUM
-        }
+android.libraryVariants.all { variant ->
+    task("${variant.name}JavadocJar", type: Jar, dependsOn: "${variant.name}Javadoc") {
+        classifier = 'javadoc'
+        from tasks["${variant.name}Javadoc"].destinationDir
     }
+
+    // Add the Javadoc jar to the project's artifacts. This will allow us to upload it easily later
+    project.artifacts.add("archives", tasks["${variant.name}JavadocJar"]);
 }
