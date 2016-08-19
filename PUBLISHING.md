@@ -1,6 +1,6 @@
 # Publishing Elixsr Library for Android
-## based on https://raw.githubusercontent.com/firebase/FirebaseUI-Android/master/library/PUBLISHING.md
-## utilised https://inthecheesefactory.com/blog/how-to-upload-library-to-jcenter-maven-central-as-dependency/en
+based on https://raw.githubusercontent.com/firebase/FirebaseUI-Android/master/library/PUBLISHING.md
+utilised https://inthecheesefactory.com/blog/how-to-upload-library-to-jcenter-maven-central-as-dependency/en
 
 # Publishing to Maven Local
 
