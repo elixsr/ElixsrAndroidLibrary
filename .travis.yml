@@ -14,4 +14,4 @@ android:
 before_install:
 - chmod +x gradlew
 script:
-- "./gradlew clean elixsrcore:build bintrayUpload"
+- "./gradlew clean library:prepareArtifacts :library:bintrayUploadAll"
