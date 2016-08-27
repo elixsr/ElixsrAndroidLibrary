@@ -1,6 +1,6 @@
 //Idea - https://github.com/firebase/FirebaseUI-Android/blob/master/common/constants.gradle
 project.ext.submodules = ['core']
 project.ext.group = "com.elixsr"
-project.ext.version = '0.1'
+project.ext.version = '0.1.2'
 project.ext.pomdesc = 'Elixsr Libraries'
 project.ext.buildtools = '24.0.0'
