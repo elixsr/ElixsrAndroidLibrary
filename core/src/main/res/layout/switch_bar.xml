@@ -11,7 +11,7 @@
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <com.elixsr.somnio.ui.settings.widget.ToggleSwitch
+    <com.elixsr.somnio.ui.settings.widgets.ToggleSwitch
         android:id="@+id/switch_widget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
