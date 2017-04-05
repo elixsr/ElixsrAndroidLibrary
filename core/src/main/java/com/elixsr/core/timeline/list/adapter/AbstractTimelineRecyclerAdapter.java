@@ -376,11 +376,11 @@ public abstract class AbstractTimelineRecyclerAdapter<VH extends AbstractTimelin
         if(!isLastInDataset){
 
             //if we didn't remove the heading
-            if(!deleteMonthHeading){
+            if(!deleteMonthHeading && !nextDatasetItemDetail.containsMonthHeading){
                 nextDatasetItemDetail.addMonthHeading(datasetItemDetail.monthHeadingListItem);
             }
 
-            if(!deleteDayHeading){
+            if(!deleteDayHeading && !nextDatasetItemDetail.containsDayHeading){
                 nextDatasetItemDetail.addDayHeading(datasetItemDetail.dayHeadingListItem);
             }
         }
